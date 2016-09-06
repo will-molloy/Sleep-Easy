@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Sleep Easy</string>
+    <string name="sleep_now">Sleep Now?</string>
+
+    <string name="spinner_title">Select a wake up time:</string>
+    <string name="explanation_text">These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n
+        A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n
+        (This is taking into consideration that it takes 15 minutes to fall asleep.)</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="options">options</string>
+    <string name="go_back">go back</string>
+
+
+</resources>
