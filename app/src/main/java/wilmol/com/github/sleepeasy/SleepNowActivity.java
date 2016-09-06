@@ -1,12 +1,22 @@
 package wilmol.com.github.sleepeasy;
 
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +56,9 @@ public class SleepNowActivity extends AppCompatActivity implements AdapterView.O
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
+        if (hour > 12){
+            hour -= 12;       // For phones with 24 hour time. (Calendar class gets 12 hour time.. but my samsung s3 doesnt ?)
+        }
         if (hour == 0){
             hour = 12;       // special case if 0:00am/0:00pm, I want to show 12:00am/12:00pm respectively.
             isAM = !isAM;    // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
@@ -105,10 +118,78 @@ public class SleepNowActivity extends AppCompatActivity implements AdapterView.O
         // do nothing
     }
 
+    /**
+     * Opens the Alarm clock app (if one exists) on an Android phone.
+     * If a clock app does not exists, opens the market store after a prompt.
+     *
+     * Thanks to http://stackoverflow.com/a/4281243 for majority of the code.
+     */
     public void setAlarm(View view) {
-        // get spinner selected item
-        // set alarm. -- alarm settings will be in options menu (volume, mp3 etc)
-        // seperate class for reuse in other screen -- soon
+        Context context = view.getContext();
+        PackageManager packageManager = context.getPackageManager();
+        Intent alarmClockIntent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+
+// Verify clock implementation
+        String clockImpls[][] = {
+                {"HTC Alarm Clock", "com.htc.android.worldclock", "com.htc.android.worldclock.WorldClockTabControl" },
+                {"Standar Alarm Clock", "com.android.deskclock", "com.android.deskclock.AlarmClock"},
+                {"Froyo Nexus Alarm Clock", "com.google.android.deskclock", "com.android.deskclock.DeskClock"},
+                {"Moto Blur Alarm Clock", "com.motorola.blur.alarmclock",  "com.motorola.blur.alarmclock.AlarmClock"},
+                {"Samsung Galaxy Clock", "com.sec.android.app.clockpackage","com.sec.android.app.clockpackage.ClockPackage"} ,
+                {"Sony Ericsson Xperia Z", "com.sonyericsson.organizer", "com.sonyericsson.organizer.Organizer_WorldClock" },
+                {"ASUS Tablets", "com.asus.deskclock", "com.asus.deskclock.DeskClock"}
+
+        };
+
+        boolean foundClockImpl = false;
+
+        for(int i=0; i<clockImpls.length; i++) {
+            String vendor = clockImpls[i][0];
+            String packageName = clockImpls[i][1];
+            String className = clockImpls[i][2];
+            try {
+                ComponentName cn = new ComponentName(packageName, className);
+                ActivityInfo aInfo = packageManager.getActivityInfo(cn, PackageManager.GET_META_DATA);
+                alarmClockIntent.setComponent(cn);
+                foundClockImpl = true;
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
+
+        if (foundClockImpl) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, alarmClockIntent, 0);
+
+            startActivity(alarmClockIntent);
+        } else {
+
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setMessage("No alarm found, open store?");
+            alertDialogBuilder.setCancelable(true);
+
+            alertDialogBuilder.setPositiveButton(
+                    "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Bring user to the market to choose an app
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setData(Uri.parse("market://details?id=" + "com.package.name"));
+                            startActivity(intent);
+                        }
+                    });
+
+            alertDialogBuilder.setNegativeButton(
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
 
     public void goToMainScreen(View view) {
