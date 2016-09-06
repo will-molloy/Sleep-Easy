@@ -12,24 +12,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+        android:gravity="center"
         android:textSize="28dp"
-        android:text="It is currently:"
+        android:text="It is currently:\nYou should wake up at one of the follownig times:"
         android:layout_marginBottom="5dp"/>
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
+        android:id="@+id/wakeup_times"
+        android:text="0000 or or 0000 or 0000 or 0000 or 0000 or 0000"
         android:textSize="28dp"
-        android:text="@string/spinner_title"
-        android:layout_marginBottom="5dp"/>
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="28dp"
-        android:prompt="@string/spinner_title"></Spinner>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:stretchColumns="0.1">
+    </TextView>
 
     <Button
         android:layout_width="wrap_content"
@@ -39,6 +35,7 @@
         android:layout_gravity="center_horizontal" />
     
     <TextView
+        android:id="@+id/explanation_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
@@ -46,13 +43,6 @@
         android:gravity="center"
         android:text="@string/explanation_text"
         android:layout_marginBottom="5dp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/go_back"
-        android:onClick="goToMainScreen"
-        android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="wrap_content"

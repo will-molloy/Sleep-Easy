@@ -9,6 +9,11 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Time12HourFormat class.
+ *
+ * Note: incomplete, however works for what I need (the Time12HourFormat class could contain no faults,
+ * but I can't confirm that).
+ *
+ * @author will 2016-09-05
  */
 public class TestTime12HourFormat {
 

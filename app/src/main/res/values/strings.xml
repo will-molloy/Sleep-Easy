@@ -10,5 +10,10 @@
     <string name="options">options</string>
     <string name="go_back">go back</string>
 
+    <string name="time_to_sleep">Time to fall asleep</string>
+    <string name="button_set">set</string>
+
+    <string name="filler_text">text</string>
+
 
 </resources>

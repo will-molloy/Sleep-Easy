@@ -1,11 +1,12 @@
 package wilmol.com.github.sleepeasy;
 
 /**
- * Created by Will on 2016-09-05.
  * Represents a Time in a 12 Hour format.
  *
  * Note: this class has not been thoroughly tested yet @see TestTime12HourFormat.
  * However, it has been tested enough for what I intend it to be used for.
+ *
+ * @author will 2016-09-05
  */
 public class Time12HourFormat {
 
@@ -95,14 +96,10 @@ public class Time12HourFormat {
         String AM_PM = null;
         if (_hour == 12){
             AM_PM = !_isAM ? "AM" : "PM";    // flip AM/PM if it is the 12th hour.
-        } else {                             // CANNOT invert the field itself!
-            AM_PM = _isAM ? "AM" : "PM";
+        } else {                             // CANNOT invert the field itself;
+            AM_PM = _isAM ? "AM" : "PM";     // this causes a fault when copying an object.
         }
         return _hour + ":" + minute + AM_PM;
-    }
-
-    protected Time12HourFormat copy()  {
-        return new Time12HourFormat(_hour, _minute, _isAM);
     }
 
 }
