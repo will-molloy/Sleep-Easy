@@ -46,14 +46,10 @@ public class SleepNowActivity extends AppCompatActivity implements AdapterView.O
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        isAM = true;
-        if (!isAM){
-            hour -= 12;     // -12 if currently PM (API is using 24 hour clock)
-        }
         if (hour == 0){
-            hour = 12;       // special case if 0:00am, I want to show 12:00am.
-            isAM = false;    // isAM is false because.. Time12HourFormat.toString() inverts isAM if the hour is 12
-            // this is partly do to me making this change later on and the API using hours [0..23]
+            hour = 12;       // special case if 0:00am/0:00pm, I want to show 12:00am/12:00pm respectively.
+            isAM = !isAM;    // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
+            // this is because the java.util.Calendar class is using hours [0..11] (and i'm using [1..12])
         }
 
        _currentTime = new Time12HourFormat(hour, minute, isAM);
@@ -88,14 +84,14 @@ public class SleepNowActivity extends AppCompatActivity implements AdapterView.O
         // Adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, wakeUpTimes);
 
-        // Drop down layout style - list view with radio button
+        // Drop down layout style
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Adding the adapter to the spinner
         spinner.setAdapter(dataAdapter);
 
-        // Default spinner selection - select max time by default
-        spinner.setSelection(TIMES_TO_SHOW-1);
+        // Default spinner selection - selects 8 hour sleep by default
+        spinner.setSelection(TIMES_TO_SHOW-2);
     }
 
     @Override
