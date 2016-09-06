@@ -14,7 +14,7 @@ import android.support.v7.app.AlertDialog;
 
 /**
  * Opens an alarm app on an android phone.
- * <p/>
+ *
  * Thanks to http://stackoverflow.com/a/4281243 for the main implementation.
  *
  * @author will 2016-09-06
