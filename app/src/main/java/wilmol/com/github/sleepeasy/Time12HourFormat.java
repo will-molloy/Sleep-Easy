@@ -102,4 +102,11 @@ public class Time12HourFormat {
         return _hour + ":" + minute + AM_PM;
     }
 
+    public int hour() {
+        return _hour;
+    }
+
+    public int minute() {
+        return _minute;
+    }
 }

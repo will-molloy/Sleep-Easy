@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Sleep Easy</string>
-    <string name="sleep_now">Sleep Now?</string>
+    <string name="sleep_now">What if I went to bed now?</string>
 
     <string name="spinner_title">Select a wake up time:</string>
     <string name="explanation_text">These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n
@@ -14,6 +14,8 @@
     <string name="button_set">set</string>
 
     <string name="filler_text">text</string>
+    <string name="calculate">Calculate</string>
+    <string name="wake_up_at">I need to wake up at ...</string>
 
 
 </resources>

@@ -74,6 +74,8 @@ public class SleepNowActivity extends AppCompatActivity {
         MINS_TO_FALL_ASLEEP = mins;
     }
 
+    public static int getMinsToFallAsleep() { return MINS_TO_FALL_ASLEEP; }
+
     private void createAndShowWakeUpTimesSpinner() {
 
         TextView textView = (TextView) findViewById(R.id.wakeup_times);
