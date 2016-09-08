@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name=".StartScreenActivity">
+        <activity android:name=".StartScreenActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +19,8 @@
         <activity
             android:name=".SleepNowActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OptionsActivity" />
+        <activity android:name=".OptionsActivity"
+            android:screenOrientation="portrait" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -27,7 +29,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".SleepAtGivenTimeActivity"></activity>
+        <activity android:name=".SleepAtGivenTimeActivity"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

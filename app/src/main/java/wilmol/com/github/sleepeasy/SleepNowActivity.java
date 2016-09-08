@@ -19,10 +19,7 @@ public class SleepNowActivity extends AbstractSleepActivity {
     private static final int SLEEP_CYCLES_TO_SHOW = 4;
 
     private boolean _wakeUpTimesOverlapNextDay;
-    /*
-     * Implementation to update screen every minute on the minute
-     * thanks to http://stackoverflow.com/a/13059819
-     */
+
     private BroadcastReceiver _broadcastReceiver;
 
     @Override
@@ -64,7 +61,7 @@ public class SleepNowActivity extends AbstractSleepActivity {
     }
 
     private void displayInitialMessageAndExplanation() {
-        String message = "It is currently " + _currentTime + ".\n" +
+        String message = "It is currently " + _currentTime + ".\n\n" +
                 "You should wake up at one of the following times:";
 
         TextView initialMessageText = (TextView) findViewById(R.id.current_time_message);
@@ -95,13 +92,17 @@ public class SleepNowActivity extends AbstractSleepActivity {
             String time = tempTime.toString(); // append to text area
             message += time + " or ";
         }
-        message = message.substring(0, message.length()-4); // remove last " or "
-        if (_wakeUpTimesOverlapNextDay){
+        message = message.substring(0, message.length() - 4); // remove last " or "
+        if (_wakeUpTimesOverlapNextDay) {
             message += (" (on the next day.)");
         }
         textView.setText(message);
     }
 
+    /*
+    * Implementation to update screen every minute on the minute
+    * thanks to http://stackoverflow.com/a/13059819
+    */
     @Override
     public void onStart() {
         super.onStart();

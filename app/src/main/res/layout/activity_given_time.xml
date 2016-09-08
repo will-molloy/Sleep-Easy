@@ -15,14 +15,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:gravity="center"
-        android:textSize="28dp"
+        android:textSize="28sp"
         android:text="If you want to wake up at 00:00am\nGo to bed at one of the following times:"
         android:layout_marginBottom="5dp"/>
 
     <TextView
         android:id="@+id/bed_times"
         android:text="0000 or 0000 or 0000 or 0000"
-        android:textSize="28dp"
+        android:textSize="28sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

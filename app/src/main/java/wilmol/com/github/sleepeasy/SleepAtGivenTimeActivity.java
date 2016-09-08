@@ -52,7 +52,7 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
     }
 
     private void showWakeUpTimeAndExplanationMessage() {
-        String message = "In order to wake up at " + _givenTime + ".\n" +
+        String message = "In order to wake up at " + _givenTime + ".\n\n" +
                 "You should go to bed at one of the following times:";
         TextView textView = (TextView) findViewById(R.id.wake_up_time_message);
         textView.setText(message);
