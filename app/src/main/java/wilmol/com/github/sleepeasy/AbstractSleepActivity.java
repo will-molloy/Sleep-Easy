@@ -11,7 +11,7 @@ import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
 /**
  * Abstract class used to show bed/Wakeup times depending on the concrete implementation.
  *
- * Has the methods for dealing with the [set alarm] and [options] buttons since these are shared
+ * Has the methods for dealing with the [set alarm] and [settings] buttons since these are shared
  * between implementations.
  *
  * @author will 2016-09-08
@@ -22,26 +22,22 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
     protected Time12HourFormat _currentTime;
 
     protected void updateFieldState() {
-        TIME_TO_FALL_ASLEEP = OptionsActivity.getTimeToFallAsleep();
+        TIME_TO_FALL_ASLEEP = SettingsActivity.getTimeToFallAsleep();
         _currentTime = Time12HourFormat.getCurrentTime();
     }
 
     /**
-     * Returns a double of the hours/minutes from a 12 hour time.
-     * E.g. (0,15,true) will return 0.25.
+     * Hook method to be implemented by subclasses.
+     * Get the text view that the explanation text is to be showed in.
      */
-    protected double getHoursFrom12HourTime(Time12HourFormat time) {
-        double hour = time.hour();
-        hour += time.isAM() ? 0 : 12;
-        hour *= 60;
-        hour += time.minute();
-        hour /= 60;
-        return hour;
-    }
+    abstract TextView getTextViewForExplanationText();
 
-    abstract void getTextViewAndDisplayExplanation();
+    /**
+     * Method to display the explanation message.
+     */
+    protected final void displayExplanationMessage() {
+        TextView textView = getTextViewForExplanationText();
 
-    protected void displayExplanationMessage(TextView textView) {
         int hour = TIME_TO_FALL_ASLEEP.hour();
         int minute = TIME_TO_FALL_ASLEEP.minute();
 
@@ -63,20 +59,20 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
     }
 
     /**
-     * Called when the options button is pressed:
-     * opens the options Activity so the user can edit a few settings.
+     * Called when the settings button is pressed:
+     * opens the settings Activity so the user can edit a few settings.
      */
-    public final void options(View view) {
+    public final void settings(View view) {
         // required so back button goes to the correct Activity
-        OptionsActivity.setPreviousActivityClass(this.getClass());
+        SettingsActivity.setPreviousActivityClass(this.getClass());
 
-        Intent intent = new Intent(this, OptionsActivity.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     /**
      * ALWAYS go back to the main screen if back button is pressed.
-     * (don't want user going back and forth between options page)
+     * (don't want user going back and forth between settings page)
      */
     @Override
     public final void onBackPressed(){

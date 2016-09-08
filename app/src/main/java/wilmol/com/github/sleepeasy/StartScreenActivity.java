@@ -49,9 +49,7 @@ public class StartScreenActivity extends AppCompatActivity {
     /**
      * Goes to the suggested bed times activity.
      */
-    public void calculateGivenTime(View view){
-        syncWakeUpTimeAndTimePicker();
-
+    public void sleepAtGivenTime(View view) {
         // set and start given time activity
         Intent intent = new Intent(this, SleepAtGivenTimeActivity.class);
         startActivity(intent);
@@ -61,21 +59,24 @@ public class StartScreenActivity extends AppCompatActivity {
      * Called when the Sleep Now button is pressed.
      */
     public void sleepNow(View view){
-        syncWakeUpTimeAndTimePicker(); // user could change time picker before pressing this button
-
         Intent intent = new Intent(this, SleepNowActivity.class);
         startActivity(intent);
     }
 
     /**
-     * Called when the options button is pressed.
+     * Called when the settings button is pressed.
      */
-    public void options(View view) {
-        syncWakeUpTimeAndTimePicker(); // user could change time picker before pressing this button
-
-        OptionsActivity.setPreviousActivityClass(this.getClass()); // required so back button comes back here
-        Intent intent = new Intent(this, OptionsActivity.class);
+    public void settings(View view) {
+        SettingsActivity.setPreviousActivityClass(this.getClass()); // required so back button comes back here
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // if user goes to another activity e.g. settings save changes made to the TimePicker
+        syncWakeUpTimeAndTimePicker();
     }
 
     @Override
@@ -83,11 +84,13 @@ public class StartScreenActivity extends AppCompatActivity {
         syncWakeUpTimeAndTimePicker(); // user could change time picker before pressing back button
 
         // if it was the given activity class that the back button is going to, make sure the given time is updated
+        // i.e. recreate the GivenTimeActivity
         if (previousActivityClass != null && previousActivityClass.equals(SleepAtGivenTimeActivity.class)) {
             Intent intent = new Intent(this, SleepAtGivenTimeActivity.class);
             startActivity(intent);
+        } else {
+            // else go back as normal
+            super.onBackPressed();
         }
-        // else go back as normal
-        super.onBackPressed();
     }
 }

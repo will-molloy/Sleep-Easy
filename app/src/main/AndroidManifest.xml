@@ -19,7 +19,8 @@
         <activity
             android:name=".SleepNowActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OptionsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:screenOrientation="portrait" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for

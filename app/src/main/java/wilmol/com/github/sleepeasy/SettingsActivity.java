@@ -13,7 +13,7 @@ import wilmol.com.github.sleepeasy.tools.TimePickerTool;
  *
  * @author will 2016-09-06
  */
-public class OptionsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private static Class previousActivityClass;
 
@@ -23,13 +23,13 @@ public class OptionsActivity extends AppCompatActivity {
     // Getters to get these settings
     public static Time12HourFormat getTimeToFallAsleep() { return TIME_TO_FALL_ASLEEP; }
 
-    // time picker and tool
+    // tool to use the time picker
     private TimePickerTool timePickerTool;
 
     /**
      * REQUIRED:
      * Set the previous Activity so that the back button will go back to the correct Activity
-     * after saving changes.
+     * after saving changes. (anyway to enforce this?)
      */
     public static void setPreviousActivityClass(Class activityClass) {
         previousActivityClass = activityClass;
@@ -44,10 +44,10 @@ public class OptionsActivity extends AppCompatActivity {
         timePickerTool = new TimePickerTool(timePicker);
 
         timePickerTool.set24hourTime(TIME_TO_FALL_ASLEEP);
-        setTimeToFallAsleep();
+        syncTimeToFallAsleepWithTimePicker();
     }
 
-    private void setTimeToFallAsleep() {
+    private void syncTimeToFallAsleepWithTimePicker() {
         TIME_TO_FALL_ASLEEP = timePickerTool.get12HourTime();
     }
 
@@ -58,7 +58,7 @@ public class OptionsActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         // save changes
-        setTimeToFallAsleep();
+        syncTimeToFallAsleepWithTimePicker();
 
         // Go back to previous page
         try {

@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/calculate"
-        android:onClick="calculateGivenTime"
+        android:onClick="sleepAtGivenTime"
         android:id="@+id/calculate_given_time"
         android:layout_below="@+id/time_picker"
         android:layout_centerHorizontal="true" />
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/options"
-        android:onClick="options"
+        android:onClick="settings"
         android:id="@+id/button4"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/calculate_given_time"

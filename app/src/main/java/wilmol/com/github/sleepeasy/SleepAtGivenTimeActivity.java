@@ -45,7 +45,7 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
      */
     private boolean determineIfBedTimesOverlapTheDay() {
 
-        double timeToFallAsleepHour = getHoursFrom12HourTime(TIME_TO_FALL_ASLEEP);
+        double timeToFallAsleepHour = TIME_TO_FALL_ASLEEP.getHoursFrom12HourTime();
         double hour = timeToFallAsleepHour + (MAX_SLEEP_CYCLE_SHOWN - SLEEP_CYCLES_TO_SHOW) * 1.5;
 
         return hour > 24;
@@ -57,7 +57,7 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
         TextView textView = (TextView) findViewById(R.id.wake_up_time_message);
         textView.setText(message);
 
-        getTextViewAndDisplayExplanation();
+        displayExplanationMessage();
     }
 
     private void createAndShowBedTimes() {
@@ -84,8 +84,7 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
         textView.setText(message);
     }
 
-    void getTextViewAndDisplayExplanation() {
-        TextView explanationText = (TextView) findViewById(R.id.explanation_text_given_time);
-        super.displayExplanationMessage(explanationText);
+    TextView getTextViewForExplanationText() {
+        return (TextView) findViewById(R.id.explanation_text_given_time);
     }
 }

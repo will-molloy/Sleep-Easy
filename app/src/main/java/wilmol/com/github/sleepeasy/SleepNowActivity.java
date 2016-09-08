@@ -27,36 +27,31 @@ public class SleepNowActivity extends AbstractSleepActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_now);
 
+        updateFieldsAndRefreshMessages();
+    }
+
+    private void updateFieldsAndRefreshMessages() {
         // updates the _currentTime and TIME_TO_FALL_ASLEEP fields
         super.updateFieldState();
 
         _wakeUpTimesOverlapNextDay = determineIfWakeUpTimesOverlapTheDay();
-        refreshCurrentTimeAndMessages();
-    }
 
-    private void refreshCurrentTimeAndMessages() {
-        _currentTime = Time12HourFormat.getCurrentTime();
+        // update messages
         displayInitialMessageAndExplanation();
         createAndShowWakeUpTimes();
     }
 
     /**
      * Returns true if the maximum wake up times exceeds the current time by 24 hours.
-     * (DOES NOT return true if it is currently 10pm for example and the maximum wake up time is 7am)
      */
     public boolean determineIfWakeUpTimesOverlapTheDay() {
         Time12HourFormat maxWakeUpTimeShown = _currentTime.addNinteyMinutesXTimes(MAX_SLEEP_CYCLE_SHOWN);
         maxWakeUpTimeShown.add(TIME_TO_FALL_ASLEEP);
 
-        double maxWakeUpHour = getHoursFrom12HourTime(maxWakeUpTimeShown);
-        double timeToFallAsleepHour = getHoursFrom12HourTime(TIME_TO_FALL_ASLEEP);
+        double maxWakeUpHour = maxWakeUpTimeShown.getHoursFrom12HourTime();
+        double timeToFallAsleepHour = TIME_TO_FALL_ASLEEP.getHoursFrom12HourTime();
         double hour = maxWakeUpHour + timeToFallAsleepHour;
 
-        /*
-        * Could return true if it is currently 10pm for example and wake up time is 7am.
-        * But, this causes too much clutter on the screen (and is obviously the next day)
-        * so only setting to true if wake up time exceeds 24 hours.
-         */
         return hour >= 24;
     }
 
@@ -67,12 +62,11 @@ public class SleepNowActivity extends AbstractSleepActivity {
         TextView initialMessageText = (TextView) findViewById(R.id.current_time_message);
         initialMessageText.setText(message);
 
-        getTextViewAndDisplayExplanation();
+        displayExplanationMessage();
     }
 
-    void getTextViewAndDisplayExplanation() {
-        TextView explanationText = (TextView) findViewById(R.id.explanation_text_sleep_now);
-        super.displayExplanationMessage(explanationText);
+    TextView getTextViewForExplanationText() {
+        return (TextView) findViewById(R.id.explanation_text_sleep_now);
     }
 
     private void createAndShowWakeUpTimes() {
@@ -100,9 +94,9 @@ public class SleepNowActivity extends AbstractSleepActivity {
     }
 
     /*
-    * Implementation to update screen every minute on the minute
-    * thanks to http://stackoverflow.com/a/13059819
-    */
+     * Implementation to update screen every minute on the minute
+     * thanks to http://stackoverflow.com/a/13059819
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -110,10 +104,10 @@ public class SleepNowActivity extends AbstractSleepActivity {
             @Override
             public void onReceive(Context ctx, Intent intent) {
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0)
-                    refreshCurrentTimeAndMessages();
+                    // Update the time and wake up time message every minute on the minute
+                    updateFieldsAndRefreshMessages();
             }
         };
-
         registerReceiver(_broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
@@ -122,6 +116,13 @@ public class SleepNowActivity extends AbstractSleepActivity {
         super.onStop();
         if (_broadcastReceiver != null)
             unregisterReceiver(_broadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update the current time and wake up time message when coming back.
+        updateFieldsAndRefreshMessages();
     }
 
 }
