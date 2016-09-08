@@ -1,5 +1,9 @@
 package wilmol.com.github.sleepeasy;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 /**
  * Represents a Time in a 12 Hour format.
  *
@@ -36,7 +40,7 @@ public class Time12HourFormat {
 
     /**
      * Adds a 12hour time to this 12hour time.
-     * Returns a string in the format hh:mmAM|PM
+     * Returns a new Time12HourFormat object with the specified time added.
      */
     public Time12HourFormat add(Time12HourFormat time){
         // convert hours to minutes, +12 if PM
@@ -67,8 +71,8 @@ public class Time12HourFormat {
     }
 
     /**
-     * Adds nintey minutes to the Time12HourFormat object
-     * @return a String of the new Time added with 90 mins.
+     * Adds nintey minutes to the Time12HourFormat object.
+     * Returns a new Time12HourFormatObject with 90 mins added.
      */
     private Time12HourFormat addNinteyMinutes(){
         Time12HourFormat time = new Time12HourFormat(_hour, _minute, _isAM);
@@ -76,8 +80,9 @@ public class Time12HourFormat {
     }
 
     /**
-     * Adds nintey minutes to the current time for the specified amount of times.
+     * Adds nintey minutes to the current time for the specified amount of iterations.
      * E.g. time.addNinteyMinutesXTimes(2) adds 3 hours to time.
+     * Returns a new Time12HourFormatObject with 90*x mins added.
      */
     public Time12HourFormat addNinteyMinutesXTimes(int x) {
         Time12HourFormat time = new Time12HourFormat(_hour, _minute, _isAM);
@@ -102,11 +107,39 @@ public class Time12HourFormat {
         return _hour + ":" + minute + AM_PM;
     }
 
+    /**
+     * Returns the current time in a 12 hour format.
+     */
+    public static Time12HourFormat getCurrentTime(){
+        TimeZone timeZone = TimeZone.getDefault();
+        Calendar calendar = new GregorianCalendar(timeZone);
+
+        boolean isAM = calendar.get(Calendar.AM_PM) == Calendar.AM;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        if (hour > 12) {
+            hour -= 12;       // For phones with 24 hour time. (Calendar class gets 12 hour time.. but my samsung s3 doesn't ?)
+        }
+        if (hour == 0) {
+            hour = 12;       // special case if 0:00am/0:00pm, I want to show 12:00am/12:00pm respectively.
+            isAM = !isAM;    // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
+            // this is because the java.util.Calendar class is using hours [0..11] (and i'm using [1..12])
+        }
+
+        return new Time12HourFormat(hour, minute, isAM);
+    }
+
+    // getters
     public int hour() {
         return _hour;
     }
 
     public int minute() {
         return _minute;
+    }
+
+    public boolean isAM() {
+        return _isAM;
     }
 }

@@ -19,6 +19,30 @@
         android:text="If you want to wake up at 00:00am\nYou should go to bed at one of the following times:"
         android:layout_marginBottom="5dp"/>
 
+    <TextView
+        android:id="@+id/bed_times"
+        android:text="0000 or 0000 or 0000 or 0000"
+        android:textSize="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="44dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/explanation"
+        android:text="These times ensure you'll rise at the end of a 90-minute sleep cycle and take into consideration that it takes 15 minutes to fall asleep."
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@+id/wake_up_time_message"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+    </TextView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +51,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp" />
+        android:id="@+id/button" />
 
 
 </RelativeLayout>

@@ -1,12 +1,9 @@
 package wilmol.com.github.sleepeasy;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
-public class GivenTimeActivity extends Activity {
+public class GivenTimeActivity extends AbstractSleepActivity {
 
    private static Time12HourFormat _givenTime;
 
@@ -20,6 +17,7 @@ public class GivenTimeActivity extends Activity {
         setContentView(R.layout.activity_given_time);
 
         showWakeUpTimeMessage();
+        createAndShowBedTimes();
     }
 
     private void showWakeUpTimeMessage() {
@@ -29,28 +27,10 @@ public class GivenTimeActivity extends Activity {
         textView.setText(message);
     }
 
-    /*
-     * methods are shared between this class and Sleep Now.. also some fields (current time etc)
-     *
-     * use inheritance? abstract?
-     *
-     * put current time method in time12hour format class,
-     */
-
-    public void options(View view) {
-        OptionsActivity.setPreviousActivityClass(this.getClass()); // required so back button comes back here
-        Intent intent = new Intent(this, OptionsActivity.class);
-        startActivity(intent);
+    private void createAndShowBedTimes() {
     }
 
-    /**
-     * ALWAYS go back to the main screen if back button is pressed.
-     * (don't want user going back and forth between options page)
-     */
-    @Override
-    public void onBackPressed(){
-        Intent intent = new Intent(this, StartScreenActivity.class);
-        startActivity(intent);
-    }
+
+
 
 }

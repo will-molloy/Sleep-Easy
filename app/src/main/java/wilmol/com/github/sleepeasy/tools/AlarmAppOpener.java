@@ -1,4 +1,4 @@
-package wilmol.com.github.sleepeasy;
+package wilmol.com.github.sleepeasy.tools;
 
 import android.app.Activity;
 import android.app.PendingIntent;

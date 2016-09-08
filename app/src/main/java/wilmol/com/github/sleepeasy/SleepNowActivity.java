@@ -1,18 +1,11 @@
 package wilmol.com.github.sleepeasy;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
 
 /**
  * Activity for when the user wants to sleep now.
@@ -20,122 +13,117 @@ import java.util.TimeZone;
  *
  * @author will 2016-09-05
  */
-public class SleepNowActivity extends AppCompatActivity {
+public class SleepNowActivity extends AbstractSleepActivity {
 
     private Time12HourFormat _currentTime;
-    private static int MINS_TO_FALL_ASLEEP = 15;
-    private static final int TIMES_TO_SHOW = 6;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
+    private static final int SLEEP_CYCLES_TO_SHOW = 6;
+    private static Time12HourFormat TIME_TO_FALL_ASLEEP;
+
+    private boolean _wakeUpTimesOverlapNextDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_now);
 
-        getCurrentTimeAndDisplayMessage();
-        createAndShowWakeUpTimesSpinner();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        // get the current time, in here so that it is updated each time the Activity is loaded
+        _currentTime = Time12HourFormat.getCurrentTime();
+        TIME_TO_FALL_ASLEEP = OptionsActivity.getTimeToFallAsleep();
+
+        determineIfWakeUpTimesOverlapTheDay();
+        displayInitialMessageAndExplanation();
+        createAndShowWakeUpTimes();
+    }
+
+    private void determineIfWakeUpTimesOverlapTheDay() {
+        Time12HourFormat maxWakeUpTime = _currentTime.addNinteyMinutesXTimes(SLEEP_CYCLES_TO_SHOW);
+        double maxWakeUpHour = getHoursFrom12HourTime(maxWakeUpTime);
+
+        double timeToFallAsleepHour = getHoursFrom12HourTime(TIME_TO_FALL_ASLEEP);
+        double hour = maxWakeUpHour + timeToFallAsleepHour;
+
+        _wakeUpTimesOverlapNextDay = hour >= 24;
     }
 
     /**
-     * Gets the current time in a 12 hour format:
-     * hour, minute stored as ints
-     * _currentTimeAM_PM stored as a String
-     * then displays the initial message.
+     * Returns a double of the hours/minutes from a 12 hour time.
+     * E.g. (0,15,true) will return 0.25.
      */
-    private void getCurrentTimeAndDisplayMessage() {
-        TimeZone timeZone = TimeZone.getDefault();
-        Calendar calendar = new GregorianCalendar(timeZone);
-
-        boolean isAM = calendar.get(Calendar.AM_PM) == Calendar.AM;
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        if (hour > 12) {
-            hour -= 12;       // For phones with 24 hour time. (Calendar class gets 12 hour time.. but my samsung s3 doesn't ?)
-        }
-        if (hour == 0) {
-            hour = 12;       // special case if 0:00am/0:00pm, I want to show 12:00am/12:00pm respectively.
-            isAM = !isAM;    // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
-            // this is because the java.util.Calendar class is using hours [0..11] (and i'm using [1..12])
-        }
-
-        _currentTime = new Time12HourFormat(hour, minute, isAM);
-        displayMessage();
+    private double getHoursFrom12HourTime(Time12HourFormat time){
+        double hour = time.hour();
+        hour += time.isAM() ? 0 : 12;
+        hour *= 60;
+        hour += time.minute();
+        hour /= 60;
+        return hour;
     }
 
-    public static void setMinsToFallAsleep(int mins) {
-        MINS_TO_FALL_ASLEEP = mins;
+    private void displayInitialMessageAndExplanation() {
+        String message = "It is currently " + _currentTime + ".\n" +
+                "You should wake up at one of the following times:";
+
+        TextView initialMessageText = (TextView) findViewById(R.id.current_time);
+        initialMessageText.setText(message);
+
+        displayExplanation();
     }
 
-    public static int getMinsToFallAsleep() { return MINS_TO_FALL_ASLEEP; }
+    private void displayExplanation() {
+        int hour = TIME_TO_FALL_ASLEEP.hour();
+        int minute = TIME_TO_FALL_ASLEEP.minute();
 
-    private void createAndShowWakeUpTimesSpinner() {
+        if (!TIME_TO_FALL_ASLEEP.isAM()) {
+            hour += 12; // want to show plain hours and minutes here
+        }
+
+        String explanation = "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n"
+                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n"
+                + "(This is taking into consideration that it takes " + minute;
+        explanation += minute == 1 ? " minute" : " minutes";
+        if (hour > 0){
+            explanation += " and " + hour;
+            explanation += hour == 1 ?  " hour" : " hours";
+        }
+        explanation += " to fall asleep.)";
+
+        TextView explanationText = (TextView) findViewById(R.id.explanation_text);
+        explanationText.setText(explanation);
+    }
+
+    private void createAndShowWakeUpTimes() {
 
         TextView textView = (TextView) findViewById(R.id.wakeup_times);
         String message = "";
 
-        // add a sleep cycle (90mins) to each time, incrementing the factor each time
+        // add a sleep cycle (90mins) to each time, incrementing the factor each iteration
         // i.e. adds 90mins, 180mins, 270mins ...
-        for (int i = 1; i <= TIMES_TO_SHOW; i++) {
+        for (int i = 1; i <= SLEEP_CYCLES_TO_SHOW; i++) {
 
             Time12HourFormat tempTime = _currentTime; // cache current time
 
             tempTime = tempTime.addNinteyMinutesXTimes(i); // calculate new time
-            tempTime = tempTime.add(new Time12HourFormat(0, MINS_TO_FALL_ASLEEP, true));
+            tempTime = tempTime.add(TIME_TO_FALL_ASLEEP);
 
             String time = tempTime.toString(); // append to text area
             message += time + " or ";
         }
         message = message.substring(0, message.length()-4); // remove last " or "
+        if (_wakeUpTimesOverlapNextDay){
+            message += (" (on the next day.)");
+        }
         textView.setText(message);
-    }
-
-    private void displayMessage() {
-        String message = "It is currently " + _currentTime + ".\n" +
-                "You should wake up at one of the following times:";
-        TextView textView = (TextView) findViewById(R.id.current_time);
-        textView.setText(message);
-
-        String explanation = "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n"
-                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n"
-                + "(This is taking into consideration that it takes " + MINS_TO_FALL_ASLEEP + " minutes to fall asleep.)";
-        TextView textview2 = (TextView) findViewById(R.id.explanation_text);
-        textview2.setText(explanation);
     }
 
     /**
+     * Called when the set alarm button is pressed:
      * Opens the Alarm clock app (if one exists) on an Android phone.
      * If a clock app does not exists, opens the market store after a prompt.
-     *
-     * Thanks to http://stackoverflow.com/a/4281243 for majority of the code.
      */
     public void setAlarm(View view) {
         Context context = view.getContext();
         AlarmAppOpener alarmAppOpener = new AlarmAppOpener(context, this);
         alarmAppOpener.openAlarmAppIfOneExistsOtherwiseOpenStore();
-    }
-
-    public void options(View view) {
-        OptionsActivity.setPreviousActivityClass(this.getClass()); // required so back button comes back here
-        Intent intent = new Intent(this, OptionsActivity.class);
-        startActivity(intent);
-    }
-
-    /**
-     * ALWAYS go back to the main screen if back button is pressed.
-     * (don't want user going back and forth between options page)
-     */
-    @Override
-    public void onBackPressed(){
-        Intent intent = new Intent(this, StartScreenActivity.class);
-        startActivity(intent);
     }
 
 }

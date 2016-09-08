@@ -1,9 +1,11 @@
-package wilmol.com.github.sleepeasy;
+package wilmol.com.github.sleepeasy.TestTime12HourFormat;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import wilmol.com.github.sleepeasy.Time12HourFormat;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author will 2016-09-05
  */
-public class TestTime12HourFormat {
+public class TestTime12HourFormatAddMethod {
 
     @Test
     public void addBothAM() throws Exception {
