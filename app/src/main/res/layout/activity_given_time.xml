@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="wilmol.com.github.sleepeasy.GivenTimeActivity">
+    tools:context=".SleepAtGivenTimeActivity">
 
     <TextView
         android:id="@+id/wake_up_time_message"
@@ -16,7 +16,7 @@
         android:layout_marginTop="10dip"
         android:gravity="center"
         android:textSize="28dp"
-        android:text="If you want to wake up at 00:00am\nYou should go to bed at one of the following times:"
+        android:text="If you want to wake up at 00:00am\nGo to bed at one of the following times:"
         android:layout_marginBottom="5dp"/>
 
     <TextView
@@ -28,20 +28,30 @@
         android:gravity="center"
         android:layout_above="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="44dp">
+        android:layout_marginBottom="80dp">
     </TextView>
 
     <TextView
-        android:id="@+id/explanation"
+        android:id="@+id/explanation_text_given_time"
         android:text="These times ensure you'll rise at the end of a 90-minute sleep cycle and take into consideration that it takes 15 minutes to fall asleep."
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_below="@+id/wake_up_time_message"
+        android:layout_alignTop="@+id/button3"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
     </TextView>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:onClick="setAlarm"
+        android:text="@string/set_alarm" />
 
     <Button
         android:layout_width="wrap_content"

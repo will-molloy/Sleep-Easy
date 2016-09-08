@@ -55,6 +55,7 @@ public class AlarmAppOpener {
                 alarmClockIntent.setComponent(cn);
                 foundClockImpl = true;
             } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
         }
 

@@ -71,6 +71,19 @@ public class Time12HourFormat {
     }
 
     /**
+     * Adds nintey minutes to the current time for the specified amount of iterations.
+     * E.g. time.addNinteyMinutesXTimes(2) adds 3 hours to time.
+     * Returns a new Time12HourFormatObject with 90*x mins added.
+     */
+    public Time12HourFormat addNinteyMinutesXTimes(int x) {
+        Time12HourFormat time = new Time12HourFormat(_hour, _minute, _isAM);
+        while (x-- > 0) {
+            time = time.addNinteyMinutes();
+        }
+        return time;
+    }
+
+    /**
      * Adds nintey minutes to the Time12HourFormat object.
      * Returns a new Time12HourFormatObject with 90 mins added.
      */
@@ -80,16 +93,49 @@ public class Time12HourFormat {
     }
 
     /**
-     * Adds nintey minutes to the current time for the specified amount of iterations.
-     * E.g. time.addNinteyMinutesXTimes(2) adds 3 hours to time.
-     * Returns a new Time12HourFormatObject with 90*x mins added.
+     * Subtracts the specified amount of time from this time object.
      */
-    public Time12HourFormat addNinteyMinutesXTimes(int x) {
+    public Time12HourFormat subtract(Time12HourFormat time) {
+        // time1 = time taken away from time2
+        // convert hours to minutes, +12 if PM
+        int time1hour = time._hour;
+        time1hour += time._isAM ? 0 : 12;
+
+        int time2hour = _hour;
+        time2hour += _isAM ? 0 : 12;
+        time2hour += 24; // add 24 hours to this time
+
+        // compute total minutes
+        int totalMinutes = _minute - time._minute;
+        totalMinutes += (time2hour - time1hour) * 60;
+
+        // extract new hours and minutes
+        int hour = totalMinutes / 60;
+        int minute = totalMinutes % 60;
+
+        // get am/pm, initially it is AM if one time is AM
+        boolean isAM = true;
+
+        // keep subtracting from hours until less than 12, while rotating through AM/PM
+        while (hour > 12) {
+            hour -= 12;
+            isAM = !isAM;
+        }
+
+        return new Time12HourFormat(hour, minute, isAM);
+    }
+
+    public Time12HourFormat subtractNinteyMinutesXTimes(int x) {
         Time12HourFormat time = new Time12HourFormat(_hour, _minute, _isAM);
         while (x-- > 0){
-            time = time.addNinteyMinutes();
+            time = time.subtractNinteyMinutes();
         }
         return time;
+    }
+
+    private Time12HourFormat subtractNinteyMinutes() {
+        Time12HourFormat time = new Time12HourFormat(_hour, _minute, _isAM);
+        return time.subtract(new Time12HourFormat(1, 30, true));
     }
 
     @Override
@@ -130,6 +176,16 @@ public class Time12HourFormat {
         return new Time12HourFormat(hour, minute, isAM);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Time12HourFormat)) {
+            return false;
+        } else {
+            Time12HourFormat time = (Time12HourFormat) obj;
+            return this.toString().equals(time.toString());
+        }
+    }
+
     // getters
     public int hour() {
         return _hour;
@@ -142,4 +198,5 @@ public class Time12HourFormat {
     public boolean isAM() {
         return _isAM;
     }
+
 }

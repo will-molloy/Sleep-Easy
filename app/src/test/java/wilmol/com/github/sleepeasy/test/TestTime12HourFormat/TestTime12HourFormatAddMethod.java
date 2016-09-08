@@ -1,4 +1,4 @@
-package wilmol.com.github.sleepeasy.TestTime12HourFormat;
+package wilmol.com.github.sleepeasy.test.TestTime12HourFormat;
 
 import org.junit.Test;
 

@@ -1,11 +1,11 @@
 package wilmol.com.github.sleepeasy;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-
-import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
 
 /**
  * Activity for when the user wants to sleep now.
@@ -15,80 +15,67 @@ import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
  */
 public class SleepNowActivity extends AbstractSleepActivity {
 
-    private Time12HourFormat _currentTime;
-
-    private static final int SLEEP_CYCLES_TO_SHOW = 6;
-    private static Time12HourFormat TIME_TO_FALL_ASLEEP;
+    private static final int MAX_SLEEP_CYCLE_SHOWN = 6;
+    private static final int SLEEP_CYCLES_TO_SHOW = 4;
 
     private boolean _wakeUpTimesOverlapNextDay;
+    /*
+     * Implementation to update screen every minute on the minute
+     * thanks to http://stackoverflow.com/a/13059819
+     */
+    private BroadcastReceiver _broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_now);
 
-        // get the current time, in here so that it is updated each time the Activity is loaded
-        _currentTime = Time12HourFormat.getCurrentTime();
-        TIME_TO_FALL_ASLEEP = OptionsActivity.getTimeToFallAsleep();
+        // updates the _currentTime and TIME_TO_FALL_ASLEEP fields
+        super.updateFieldState();
 
-        determineIfWakeUpTimesOverlapTheDay();
+        _wakeUpTimesOverlapNextDay = determineIfWakeUpTimesOverlapTheDay();
+        refreshCurrentTimeAndMessages();
+    }
+
+    private void refreshCurrentTimeAndMessages() {
+        _currentTime = Time12HourFormat.getCurrentTime();
         displayInitialMessageAndExplanation();
         createAndShowWakeUpTimes();
     }
 
-    private void determineIfWakeUpTimesOverlapTheDay() {
-        Time12HourFormat maxWakeUpTime = _currentTime.addNinteyMinutesXTimes(SLEEP_CYCLES_TO_SHOW);
-        double maxWakeUpHour = getHoursFrom12HourTime(maxWakeUpTime);
+    /**
+     * Returns true if the maximum wake up times exceeds the current time by 24 hours.
+     * (DOES NOT return true if it is currently 10pm for example and the maximum wake up time is 7am)
+     */
+    public boolean determineIfWakeUpTimesOverlapTheDay() {
+        Time12HourFormat maxWakeUpTimeShown = _currentTime.addNinteyMinutesXTimes(MAX_SLEEP_CYCLE_SHOWN);
+        maxWakeUpTimeShown.add(TIME_TO_FALL_ASLEEP);
 
+        double maxWakeUpHour = getHoursFrom12HourTime(maxWakeUpTimeShown);
         double timeToFallAsleepHour = getHoursFrom12HourTime(TIME_TO_FALL_ASLEEP);
         double hour = maxWakeUpHour + timeToFallAsleepHour;
 
-        _wakeUpTimesOverlapNextDay = hour >= 24;
-    }
-
-    /**
-     * Returns a double of the hours/minutes from a 12 hour time.
-     * E.g. (0,15,true) will return 0.25.
-     */
-    private double getHoursFrom12HourTime(Time12HourFormat time){
-        double hour = time.hour();
-        hour += time.isAM() ? 0 : 12;
-        hour *= 60;
-        hour += time.minute();
-        hour /= 60;
-        return hour;
+        /*
+        * Could return true if it is currently 10pm for example and wake up time is 7am.
+        * But, this causes too much clutter on the screen (and is obviously the next day)
+        * so only setting to true if wake up time exceeds 24 hours.
+         */
+        return hour >= 24;
     }
 
     private void displayInitialMessageAndExplanation() {
         String message = "It is currently " + _currentTime + ".\n" +
                 "You should wake up at one of the following times:";
 
-        TextView initialMessageText = (TextView) findViewById(R.id.current_time);
+        TextView initialMessageText = (TextView) findViewById(R.id.current_time_message);
         initialMessageText.setText(message);
 
-        displayExplanation();
+        getTextViewAndDisplayExplanation();
     }
 
-    private void displayExplanation() {
-        int hour = TIME_TO_FALL_ASLEEP.hour();
-        int minute = TIME_TO_FALL_ASLEEP.minute();
-
-        if (!TIME_TO_FALL_ASLEEP.isAM()) {
-            hour += 12; // want to show plain hours and minutes here
-        }
-
-        String explanation = "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n"
-                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n"
-                + "(This is taking into consideration that it takes " + minute;
-        explanation += minute == 1 ? " minute" : " minutes";
-        if (hour > 0){
-            explanation += " and " + hour;
-            explanation += hour == 1 ?  " hour" : " hours";
-        }
-        explanation += " to fall asleep.)";
-
-        TextView explanationText = (TextView) findViewById(R.id.explanation_text);
-        explanationText.setText(explanation);
+    void getTextViewAndDisplayExplanation() {
+        TextView explanationText = (TextView) findViewById(R.id.explanation_text_sleep_now);
+        super.displayExplanationMessage(explanationText);
     }
 
     private void createAndShowWakeUpTimes() {
@@ -98,7 +85,7 @@ public class SleepNowActivity extends AbstractSleepActivity {
 
         // add a sleep cycle (90mins) to each time, incrementing the factor each iteration
         // i.e. adds 90mins, 180mins, 270mins ...
-        for (int i = 1; i <= SLEEP_CYCLES_TO_SHOW; i++) {
+        for (int i = MAX_SLEEP_CYCLE_SHOWN - SLEEP_CYCLES_TO_SHOW + 1; i <= MAX_SLEEP_CYCLE_SHOWN; i++) {
 
             Time12HourFormat tempTime = _currentTime; // cache current time
 
@@ -115,15 +102,25 @@ public class SleepNowActivity extends AbstractSleepActivity {
         textView.setText(message);
     }
 
-    /**
-     * Called when the set alarm button is pressed:
-     * Opens the Alarm clock app (if one exists) on an Android phone.
-     * If a clock app does not exists, opens the market store after a prompt.
-     */
-    public void setAlarm(View view) {
-        Context context = view.getContext();
-        AlarmAppOpener alarmAppOpener = new AlarmAppOpener(context, this);
-        alarmAppOpener.openAlarmAppIfOneExistsOtherwiseOpenStore();
+    @Override
+    public void onStart() {
+        super.onStart();
+        _broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context ctx, Intent intent) {
+                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0)
+                    refreshCurrentTimeAndMessages();
+            }
+        };
+
+        registerReceiver(_broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (_broadcastReceiver != null)
+            unregisterReceiver(_broadcastReceiver);
     }
 
 }

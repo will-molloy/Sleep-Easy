@@ -1,13 +1,8 @@
 package wilmol.com.github.sleepeasy;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TimePicker;
 
 import wilmol.com.github.sleepeasy.tools.TimePickerTool;
@@ -28,6 +23,9 @@ public class OptionsActivity extends AppCompatActivity {
     // Getters to get these settings
     public static Time12HourFormat getTimeToFallAsleep() { return TIME_TO_FALL_ASLEEP; }
 
+    // time picker and tool
+    private TimePickerTool timePickerTool;
+
     /**
      * REQUIRED:
      * Set the previous Activity so that the back button will go back to the correct Activity
@@ -42,19 +40,14 @@ public class OptionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        int hour = TIME_TO_FALL_ASLEEP.hour();
-        hour += TIME_TO_FALL_ASLEEP.isAM() ? 0 : 12;
-
         TimePicker timePicker = (TimePicker) findViewById(R.id.time_picker_options);
-        timePicker.setIs24HourView(true);
-        timePicker.setHour(hour);
-        timePicker.setMinute(TIME_TO_FALL_ASLEEP.minute());
+        timePickerTool = new TimePickerTool(timePicker);
+
+        timePickerTool.set24hourTime(TIME_TO_FALL_ASLEEP);
+        setTimeToFallAsleep();
     }
 
     private void setTimeToFallAsleep() {
-        // Get time from time picker
-        TimePicker timePicker = (TimePicker) findViewById(R.id.time_picker_options);
-        TimePickerTool timePickerTool = new TimePickerTool(timePicker);
         TIME_TO_FALL_ASLEEP = timePickerTool.get12HourTime();
     }
 

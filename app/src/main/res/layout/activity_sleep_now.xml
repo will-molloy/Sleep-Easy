@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:id="@+id/activity_sleep_now"
-
-    android:padding="10dip"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SleepAtGivenTimeActivity">
 
     <TextView
-        android:id="@+id/current_time"
+        android:id="@+id/current_time_message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:gravity="center"
-        android:textSize="28dp"
-        android:text="It is currently:\nYou should wake up at one of the follownig times:"
+        android:textSize="28sp"
+        android:text="If you want to wake up at 00:00am\nYou should go to bed at one of the following times:"
         android:layout_marginBottom="5dp"/>
 
     <TextView
         android:id="@+id/wakeup_times"
-        android:text="0000 or or 0000 or 0000 or 0000 or 0000 or 0000"
-        android:textSize="28dp"
+        android:layout_above="@+id/button"
+        android:textSize="28sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:stretchColumns="0.1">
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:text="0000 or 0000 or 0000 or 0000">
     </TextView>
+
+    <TextView
+        android:id="@+id/explanation_text_sleep_now"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/button3"
+        android:gravity="center"
+        android:text="These times ensure you'll rise at the end of a 90-minute sleep cycle and take into consideration that it takes 15 minutes to fall asleep."
+        android:textSize="20sp"></TextView>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_alarm"
         android:onClick="setAlarm"
+        android:id="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_gravity="center_horizontal" />
-    
-    <TextView
-        android:id="@+id/explanation_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:text="@string/explanation_text"
-        android:layout_marginBottom="5dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/options"
         android:onClick="options"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal" />
 
 
-</LinearLayout>
+</RelativeLayout>
