@@ -36,9 +36,25 @@ public class StartScreenActivity extends AppCompatActivity {
         TimePicker timePicker = (TimePicker) findViewById(R.id.time_picker);
         timePickerTool = new TimePickerTool(timePicker);
 
-        timePickerTool.set12HourTime(wakeUpTime);
+        refreshTimePicker();
         syncWakeUpTimeAndTimePicker();
+    }
 
+    private void refreshTimePicker() {
+        if (wakeUpTime.hour() == 12 && !wakeUpTime.isAM()){
+            // case if TimePicker is showing 12:xxAM but isAM is false,
+            // need to recreate object using hour as 0 and isAM as true.
+            // (Otherwise, Time12HourFormat inverts isAM twice (so keeps as false)
+            // therefore showing 12pm).
+
+            // The reason for this:
+            //  TimePicker uses a 24 hour format even though it is showing a 12 hour one and I didn't
+            //  know this until I found this fault.
+            //  I want to show 12am not 0am
+            //  The Time12HourFormat class accepts '12' as an hour but really shouldn't
+            wakeUpTime = new Time12HourFormat(0,wakeUpTime.minute(),true);
+        }
+        timePickerTool.set12HourTime(wakeUpTime);
     }
 
     private void syncWakeUpTimeAndTimePicker() {
@@ -50,7 +66,7 @@ public class StartScreenActivity extends AppCompatActivity {
      * Goes to the suggested bed times activity.
      */
     public void sleepAtGivenTime(View view) {
-        // set and start given time activity
+        // (GivenTimeActivity is set in onPause() method)
         Intent intent = new Intent(this, SleepAtGivenTimeActivity.class);
         startActivity(intent);
     }
@@ -75,8 +91,9 @@ public class StartScreenActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        // if user goes to another activity e.g. settings save changes made to the TimePicker
+
         syncWakeUpTimeAndTimePicker();
+        refreshTimePicker();
     }
 
     @Override
