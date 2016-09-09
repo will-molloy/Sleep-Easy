@@ -17,7 +17,7 @@ tools:context=".SleepNowActivity">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:textSize="18sp"
+    android:textSize="40sp"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
     android:text="@string/dummy_wake_up" >
@@ -30,9 +30,9 @@ tools:context=".SleepNowActivity">
     android:layout_height="wrap_content"
     android:gravity="center"
     android:text="@string/wake_up_at_one_of_these_times"
-    android:textSize="18sp"
+    android:textSize="40sp"
     android:layout_below="@+id/current_time_message"
-    android:layout_marginTop="14dp"
+    android:layout_marginTop="30dp"
     android:layout_centerHorizontal="true" >
 </TextView>
 
@@ -40,14 +40,14 @@ tools:context=".SleepNowActivity">
 <TextView
     android:id="@+id/explanation_text_sleep_now"
     android:text="@string/dummy_explanation"
-    android:textSize="14sp"
+    android:textSize="35sp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
     android:gravity="center"
     android:layout_alignParentStart="true"
     android:layout_below="@+id/button3"
-    android:layout_marginTop="14dp">
+    android:layout_marginTop="20dp">
 </TextView>
 
 <TextView
@@ -57,38 +57,37 @@ tools:context=".SleepNowActivity">
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_below="@+id/wake_up_at_msg"
-    android:layout_marginTop="12dp"
+    android:layout_marginTop="30dp"
     android:gravity="center"
     android:text="@string/dummy_times"
-    android:textSize="16sp">
+    android:textSize="40sp">
 </TextView>
 
 
-<Button
-    android:textSize="14sp"
-    android:layout_width="100dp"
-    android:layout_height="40dp"
-    android:layout_alignLeft="@+id/button"
-    android:id="@+id/button3"
-    android:layout_gravity="center_horizontal"
-    android:onClick="setAlarm"
-    android:layout_alignStart="@+id/button"
-    android:layout_below="@+id/wakeup_times"
-    android:layout_marginTop="10dp"
-    android:background="@drawable/custom_button"
-    android:text="@string/set_alarm" />
+    <Button
+        android:textSize="30sp"
+        android:layout_width="210dp"
+        android:layout_height="65dp"
+        android:id="@+id/button3"
+        android:layout_gravity="center_horizontal"
+        android:onClick="setAlarm"
+        android:background="@drawable/custom_button"
+        android:text="@string/set_alarm"
+        android:layout_below="@+id/wakeup_times"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true" />
 
-<Button
-    android:textSize="14sp"
-    android:layout_width="100dp"
-    android:layout_height="40dp"
-    android:id="@+id/button"
-    android:text="@string/options"
-    android:onClick="settings"
-    android:layout_gravity="center_horizontal"
-    android:background="@drawable/custom_button"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true" />
+    <Button
+        android:textSize="30sp"
+        android:layout_width="210dp"
+        android:layout_height="65dp"
+        android:id="@+id/button"
+        android:text="@string/options"
+        android:onClick="settings"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/custom_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

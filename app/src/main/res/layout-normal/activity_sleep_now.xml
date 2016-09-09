@@ -60,14 +60,14 @@ tools:context=".SleepNowActivity">
     android:layout_marginTop="12dp"
     android:gravity="center"
     android:text="@string/dummy_times"
-    android:textSize="16sp">
+    android:textSize="18sp">
 </TextView>
 
 
 <Button
     android:textSize="14sp"
     android:layout_width="100dp"
-    android:layout_height="40dp"
+    android:layout_height="35dp"
     android:layout_alignLeft="@+id/button"
     android:id="@+id/button3"
     android:layout_gravity="center_horizontal"
@@ -81,7 +81,7 @@ tools:context=".SleepNowActivity">
 <Button
     android:textSize="14sp"
     android:layout_width="100dp"
-    android:layout_height="40dp"
+    android:layout_height="35dp"
     android:id="@+id/button"
     android:text="@string/options"
     android:onClick="settings"

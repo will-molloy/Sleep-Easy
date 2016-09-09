@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class SleepNowActivity extends AbstractSleepActivity {
 
     @Override
     protected void appendTimesOverlapDayMsg(TextView textView) {
-        textView.append(Html.fromHtml("<small>" + "&nbsp;(on the next day.)" + "</small>"));
+        textView.append(Html.fromHtml("<small>" + "&nbsp;(on the next day)." + "</small>"));
     }
 
     /*

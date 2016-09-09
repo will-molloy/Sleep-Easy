@@ -100,6 +100,6 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
 
     @Override
     protected void appendTimesOverlapDayMsg(TextView textView) {
-        textView.append(" (on the previous day.)");
+        textView.append(" (on the previous day).");
     }
 }
