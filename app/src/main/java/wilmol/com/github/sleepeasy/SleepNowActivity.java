@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
 
@@ -18,9 +21,7 @@ import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
 public class SleepNowActivity extends AbstractSleepActivity {
 
     private static final int MAX_SLEEP_CYCLE_SHOWN = 6;
-    private static final int SLEEP_CYCLES_TO_SHOW = 4;
-
-    private boolean _wakeUpTimesOverlapNextDay;
+    private static final int SLEEP_CYCLES_TO_SHOW = 6;
 
     private BroadcastReceiver _broadcastReceiver;
 
@@ -36,45 +37,33 @@ public class SleepNowActivity extends AbstractSleepActivity {
         // updates the _currentTime and TIME_TO_FALL_ASLEEP fields
         super.updateFieldState();
 
-        _wakeUpTimesOverlapNextDay = determineIfWakeUpTimesOverlapTheDay();
-
         // update messages
         displayInitialMessageAndExplanation();
-        createAndShowWakeUpTimes();
-    }
-
-    /**
-     * Returns true if the maximum wake up times exceeds the current time by 24 hours.
-     */
-    public boolean determineIfWakeUpTimesOverlapTheDay() {
-        Time12HourFormat maxWakeUpTimeShown = _currentTime.addNinteyMinutesXTimes(MAX_SLEEP_CYCLE_SHOWN);
-        maxWakeUpTimeShown.add(TIME_TO_FALL_ASLEEP);
-
-        double maxWakeUpHour = maxWakeUpTimeShown.getHoursFrom12HourTime();
-        double timeToFallAsleepHour = TIME_TO_FALL_ASLEEP.getHoursFrom12HourTime();
-        double hour = maxWakeUpHour + timeToFallAsleepHour;
-
-        return hour >= 24;
+        super.createAndShowTimes();
     }
 
     private void displayInitialMessageAndExplanation() {
-        String message = "It is currently " + _currentTime + ".\n\n" +
-                "You should wake up at one of the following times:";
+        String message = "It is currently " + _currentTime + ".";
 
         TextView initialMessageText = (TextView) findViewById(R.id.current_time_message);
         initialMessageText.setText(message);
 
-        displayExplanationMessage();
+        super.displayExplanationMessage();
     }
 
-    TextView getTextViewForExplanationText() {
+    @Override
+    protected TextView getTextViewForExplanationText() {
         return (TextView) findViewById(R.id.explanation_text_sleep_now);
     }
 
-    private void createAndShowWakeUpTimes() {
+    @Override
+    protected TextView getTextViewToDisplayTimes() {
+        return (TextView) findViewById(R.id.wakeup_times);
+    }
 
-        TextView textView = (TextView) findViewById(R.id.wakeup_times);
-        String message = "";
+    @Override
+    protected ArrayList<String> computeAndTimesAndAddToArrayList() {
+        ArrayList<String> timesToShow = new ArrayList<String>();
 
         // add a sleep cycle (90mins) to each time, incrementing the factor each iteration
         // i.e. adds 90mins, 180mins, 270mins ...
@@ -85,14 +74,44 @@ public class SleepNowActivity extends AbstractSleepActivity {
             tempTime = tempTime.addNinteyMinutesXTimes(i); // calculate new time
             tempTime = tempTime.add(TIME_TO_FALL_ASLEEP);
 
-            String time = tempTime.toString(); // append to text area
-            message += time + " or ";
+            timesToShow.add(tempTime.toString());
         }
-        message = message.substring(0, message.length() - 4); // remove last " or "
-        if (_wakeUpTimesOverlapNextDay) {
-            message += (" (on the next day.)");
-        }
-        textView.setText(message);
+        return timesToShow;
+    }
+
+    /**
+     * Returns true if the wake up times will overlap the bed time (current time) by 24 hours.
+     */
+    @Override
+    protected boolean getTimesOverlap() {
+        Time12HourFormat maxWakeUpTimeShown = _currentTime.addNinteyMinutesXTimes(MAX_SLEEP_CYCLE_SHOWN);
+        maxWakeUpTimeShown.add(TIME_TO_FALL_ASLEEP);
+
+        double maxWakeUpHour = maxWakeUpTimeShown.getHoursFrom12HourTime();
+        double timeToFallAsleepHour = TIME_TO_FALL_ASLEEP.getHoursFrom12HourTime();
+        double hour = maxWakeUpHour + timeToFallAsleepHour;
+
+        return hour >= 24;
+    }
+
+    @Override
+    protected int initialValueForAppendingTimes() {
+        return SLEEP_CYCLES_TO_SHOW + 1;
+    }
+
+    @Override
+    protected int nextValueForAppendingTimes(int value) {
+        return --value;
+    }
+
+    @Override
+    protected boolean orShouldBeAddedBetweenTimes(int value) {
+        return value > 1;
+    }
+
+    @Override
+    protected void appendTimesOverlapDayMsg(TextView textView) {
+        textView.append(Html.fromHtml("<small>" + "&nbsp;(on the next day.)" + "</small>"));
     }
 
     /*

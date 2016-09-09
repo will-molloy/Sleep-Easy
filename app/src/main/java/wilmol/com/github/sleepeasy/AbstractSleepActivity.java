@@ -3,8 +3,11 @@ package wilmol.com.github.sleepeasy;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
 import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
@@ -31,7 +34,7 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
      * Hook method to be implemented by subclasses.
      * Get the text view that the explanation text is to be showed in.
      */
-    abstract TextView getTextViewForExplanationText();
+    protected abstract TextView getTextViewForExplanationText();
 
     /**
      * Method to display the explanation message.
@@ -67,11 +70,80 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
             explanation += " to fall asleep.)";
 
         } else { // not showing hour or minute
-            explanation += "(Assuming you fall asleep instantly.)";
+            explanation += "(This is assuming you fall asleep instantly.)";
         }
 
         textView.setText(explanation);
     }
+
+    /**
+     * Create and show the times to be displayed to the user (wake up or bed times)
+     */
+    protected final void createAndShowTimes() {
+        TextView textView = getTextViewToDisplayTimes();
+        textView.setText("");
+        ArrayList<String> timesToShow = computeAndTimesAndAddToArrayList();
+        boolean timesOverLap = getTimesOverlap();
+
+        appendTimesToTextViewWithColour(timesToShow, textView, timesOverLap);
+    }
+
+    protected abstract TextView getTextViewToDisplayTimes();
+
+    protected abstract ArrayList<String> computeAndTimesAndAddToArrayList();
+
+    protected abstract boolean getTimesOverlap();
+
+    /**
+     * Show the times using colour depending on the implementaion the order of the colour
+     * (green, yellow, red) will be different
+     */
+    protected final void appendTimesToTextViewWithColour(ArrayList<String> timesToShow, TextView textView, boolean timesOverlap) {
+        int i = initialValueForAppendingTimes();
+        int timesToShowSize = timesToShow.size();
+
+        for (String s : timesToShow) {
+            i = nextValueForAppendingTimes(i);
+            if (i == 1) {
+                textView.append(Html.fromHtml("<font color=#7bea7b>" + s + "</font>")); // green
+            } else if (i < timesToShowSize / 2) {
+                textView.append(Html.fromHtml("<font color=#90EE90>" + s + "</font>")); // yellow/green
+            } else if (i <= timesToShowSize * 3 / 4) {
+                textView.append(Html.fromHtml("<font color=#EEEE90>" + s + "</font>")); // yellow
+            } else if (i == timesToShowSize) {
+                textView.append(Html.fromHtml("<font color=#ea8a7b>" + s + "</font>")); // red
+            } else {
+                textView.append(Html.fromHtml("<font color=#EE9D90>" + s + "</font>")); // lighter red
+            }
+            if (orShouldBeAddedBetweenTimes(i)) {
+                textView.append(Html.fromHtml("<i><small>" + "&nbsp;or&nbsp;" + "</i></small>"));    // italics
+            }
+        }
+
+        if (timesOverlap) {
+            appendTimesOverlapDayMsg(textView);
+        }
+    }
+
+    protected abstract int initialValueForAppendingTimes();
+
+    protected abstract int nextValueForAppendingTimes(int value);
+
+    protected abstract boolean orShouldBeAddedBetweenTimes(int value);
+
+    protected abstract void appendTimesOverlapDayMsg(TextView textView);
+
+    /**
+     * Called when the set alarm button is pressed:
+     * Opens the Alarm clock app (if one exists) on an Android phone.
+     * If a clock app does not exists, opens the market store after a prompt.
+     */
+    public final void setAlarm(View view) {
+        Context context = view.getContext();
+        AlarmAppOpener alarmAppOpener = new AlarmAppOpener(context, this);
+        alarmAppOpener.openAlarmAppIfOneExistsOtherwiseOpenStore();
+    }
+
 
     /**
      * Called when the settings button is pressed:
@@ -90,19 +162,8 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
      * (don't want user going back and forth between settings page)
      */
     @Override
-    public final void onBackPressed(){
+    public final void onBackPressed() {
         Intent intent = new Intent(this, StartScreenActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * Called when the set alarm button is pressed:
-     * Opens the Alarm clock app (if one exists) on an Android phone.
-     * If a clock app does not exists, opens the market store after a prompt.
-     */
-    public final void setAlarm(View view) {
-        Context context = view.getContext();
-        AlarmAppOpener alarmAppOpener = new AlarmAppOpener(context, this);
-        alarmAppOpener.openAlarmAppIfOneExistsOtherwiseOpenStore();
     }
 }

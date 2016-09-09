@@ -16,6 +16,8 @@
     <string name="calculate">Calculate</string>
     <string name="wake_up_at">I need to wake up at ...</string>
     <string name="what_if_i_go_to_bed_now">What if I go to bed now?</string>
+    <string name="wake_up_at_one_of_these_times">You should wake up at one of the following times:</string>
+    <string name="go_to_bed_at_one_of_the_following">You should go to bed at one of the following times:</string>
 
 
 </resources>
