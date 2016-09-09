@@ -101,7 +101,7 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
     protected final void appendTimesToTextViewWithColour(ArrayList<String> timesToShow, TextView textView, boolean timesOverlap) {
         int i = initialValueForAppendingTimes();
         int timesToShowSize = timesToShow.size();
-
+        boolean newLine = false;
         for (String s : timesToShow) {
             i = nextValueForAppendingTimes(i);
             if (i == 1) {
@@ -117,6 +117,10 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
             }
             if (orShouldBeAddedBetweenTimes(i)) {
                 textView.append(Html.fromHtml("<i><small>" + "&nbsp;or&nbsp;" + "</i></small>"));    // italics
+            }
+            if ((i == 3 || i == 4 )&& !newLine){
+                textView.append("\n");
+                newLine = true;
             }
         }
 

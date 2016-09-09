@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="It is currently 0000am" />
@@ -25,28 +25,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:text="@string/go_to_bed_at_one_of_the_following"
+        android:textSize="20sp"
         android:layout_below="@+id/wake_up_time_message"
         android:layout_marginTop="20dp"
-        android:text="@string/go_to_bed_at_one_of_the_following"
-        android:textSize="28sp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/explanation_text_given_time"
         android:text="These times ensure you'll rise at the end of a 90-minute sleep cycle and take into consideration that it takes 15 minutes to fall asleep."
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:gravity="center"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/button3"
-        android:layout_marginTop="20dp"></TextView>
+        android:layout_marginTop="20dp">
+    </>
 
     <TextView
         android:id="@+id/bed_times"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -54,7 +54,8 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="0000 or 0000 or 0000 or 0000"
-        android:textSize="28sp"></TextView>
+        android:textSize="20sp">
+    </>
 
     <Button
         android:layout_alignLeft="@+id/button"
