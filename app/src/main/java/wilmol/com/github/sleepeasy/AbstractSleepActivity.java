@@ -46,14 +46,28 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
         }
 
         String explanation = "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n"
-                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n"
-                + "(This is taking into consideration that it takes " + minute;
-        explanation += minute == 1 ? " minute" : " minutes";
-        if (hour > 0) {
-            explanation += " and " + hour;
-            explanation += hour == 1 ? " hour" : " hours";
+                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n";
+
+        if (minute > 0 || hour > 0) {
+
+            explanation += "(This is taking into consideration that it takes ";
+            if (minute > 0){ // showing minute
+                explanation += minute;
+                explanation += minute == 1 ? " minute" : " minutes";
+                if (hour > 0){ // showing hour and minute
+                    explanation += " and "  + hour;
+                }
+            } else if (hour > 0){ // showing only hour
+                explanation += hour;
+            }
+            if (hour > 0){
+                explanation += hour == 1 ? " hour" : " hours";
+            }
+            explanation += " to fall asleep.)";
+
+        } else { // not showing hour or minute
+            explanation += "(Assuming you fall asleep instantly.)";
         }
-        explanation += " to fall asleep.)";
 
         textView.setText(explanation);
     }

@@ -30,8 +30,8 @@ public class Time12HourFormat {
         _hour = hour;
         _minute = minute;
         _isAM = AM_PM;
-        if (hour > 12 || hour < 0){
-            throw new IllegalArgumentException("Hour exceeds [0..12] range.");
+        if (hour > 11 || hour < 0){
+            throw new IllegalArgumentException("Hour exceeds [0..11] range.");
         }
         if (minute > 60 || minute < 0) {
             throw new IllegalArgumentException("Minute exceeds [0..60] range.");
@@ -105,7 +105,7 @@ public class Time12HourFormat {
         boolean isAM = true;
 
         // keep subtracting from hours until less than 12, while rotating through AM/PM
-        while (hour > 12) {
+        while (hour >= 12) {
             hour -= 12;
             isAM = !isAM;
         }
@@ -158,13 +158,8 @@ public class Time12HourFormat {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        if (hour > 12) {
-            hour -= 12;       // For phones with 24 hour time. (Calendar class gets 12 hour time.. but my samsung s3 doesn't ?)
-        }
-        if (hour == 0) {
-            hour = 12;       // special case if 0:00am/0:00pm, I want to show 12:00am/12:00pm respectively.
-            isAM = !isAM;    // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
-            // this is because the java.util.Calendar class is using hours [0..11] (and i'm using [1..12])
+        if (hour >= 12) {
+            hour -= 12; // For phones with 24 hour time. (Calendar class gets 12 hour time.. but my samsung s3 doesn't ?)
         }
 
         return new Time12HourFormat(hour, minute, isAM);
@@ -186,16 +181,18 @@ public class Time12HourFormat {
     @Override
     public String toString(){
         String minute = _minute + "";
+        String hour = "";
         if (_minute < 10){
             minute = "0" + minute;
         }
-        String AM_PM = null;
-        if (_hour == 12){
-            AM_PM = !_isAM ? "AM" : "PM";    // flip AM/PM if it is the 12th hour.
-        } else {                             // CANNOT invert the field itself;
-            AM_PM = _isAM ? "AM" : "PM";     // this causes a fault when copying an object.
+
+        if (_hour == 0){
+            hour = 12 + ""; // to show 12am / 12pm instead of 0am / 0pm respectively
+        } else {
+            hour = _hour + "";
         }
-        return _hour + ":" + minute + AM_PM;
+        String AM_PM = _isAM ? "AM" : "PM";
+        return hour + ":" + minute + AM_PM;
     }
 
 }

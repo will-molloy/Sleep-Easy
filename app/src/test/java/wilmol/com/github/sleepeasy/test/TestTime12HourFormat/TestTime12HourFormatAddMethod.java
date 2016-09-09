@@ -66,17 +66,17 @@ public class TestTime12HourFormatAddMethod {
 
     @Test
     public void hour12PlusHour24() throws Exception {
-        Time12HourFormat time1 = new Time12HourFormat(12, 00, true); // 12pm (12)
-        Time12HourFormat time2 = new Time12HourFormat(12, 00, false); // 12am (24)
+        Time12HourFormat time1 = new Time12HourFormat(0, 00, true); // 12am (12)
+        Time12HourFormat time2 = new Time12HourFormat(0, 00, false); // 12pm (24)
 
-        String result = time1.add(time2).toString();
+        String result = time2.add(time1).toString();
         assertEquals("12:00PM", result);
     }
 
     @Test
     public void hour12PlusHour12() throws Exception {
-        Time12HourFormat time1 = new Time12HourFormat(12, 00, true); // 12pm (12)
-        Time12HourFormat time2 = new Time12HourFormat(12, 00, true); // 12pm (12)
+        Time12HourFormat time2 = new Time12HourFormat(0, 00, true); // 12pm (12)
+        Time12HourFormat time1 = new Time12HourFormat(0, 00, true); // 12pm (12)
 
         String result = time1.add(time2).toString();
         assertEquals("12:00AM", result);
@@ -84,8 +84,8 @@ public class TestTime12HourFormatAddMethod {
 
     @Test
     public void hour24PlusHour24() throws Exception {
-        Time12HourFormat time1 = new Time12HourFormat(12, 00, false); // 12am (24)
-        Time12HourFormat time2 = new Time12HourFormat(12, 00, false); // 12am (24)
+        Time12HourFormat time1 = new Time12HourFormat(0, 00, true); // 12am (0/24)
+        Time12HourFormat time2 = new Time12HourFormat(0, 00, true); // 12am (0/24)
 
         String result = time1.add(time2).toString();
         assertEquals("12:00AM", result);

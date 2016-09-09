@@ -48,7 +48,7 @@ public class SleepAtGivenTimeActivity extends AbstractSleepActivity {
         double timeToFallAsleepHour = TIME_TO_FALL_ASLEEP.getHoursFrom12HourTime();
         double hour = timeToFallAsleepHour + (MAX_SLEEP_CYCLE_SHOWN - SLEEP_CYCLES_TO_SHOW) * 1.5;
 
-        return hour > 24;
+        return hour >= 24;
     }
 
     private void showWakeUpTimeAndExplanationMessage() {

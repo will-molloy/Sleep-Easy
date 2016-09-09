@@ -25,12 +25,9 @@ public class TimePickerTool {
         int hour = timePicker.getCurrentHour();
         int minute = timePicker.getCurrentMinute();
         boolean isAM = true;
-        if (hour > 12){
+        if (hour >= 12){
             isAM = false;
             hour -= 12;
-        } else if (hour == 0){
-            hour += 12;     // want to show 12am not 0am
-            isAM = !isAM;   // isAM is inverted because.. Time12HourFormat.toString() inverts isAM if the hour is 12
         }
         return new Time12HourFormat(hour,minute,isAM);
     }
