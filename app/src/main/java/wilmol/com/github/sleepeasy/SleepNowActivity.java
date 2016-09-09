@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
+
 /**
  * Activity for when the user wants to sleep now.
  * Creates a table of recommended wake up times and gives the user the option to set an alarm.

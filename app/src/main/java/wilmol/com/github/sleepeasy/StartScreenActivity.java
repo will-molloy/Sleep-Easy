@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TimePicker;
 
+import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
 import wilmol.com.github.sleepeasy.tools.TimePickerTool;
 
 /**

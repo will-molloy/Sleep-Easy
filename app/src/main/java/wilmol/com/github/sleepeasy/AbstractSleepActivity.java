@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import wilmol.com.github.sleepeasy.tools.AlarmAppOpener;
+import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
 
 /**
  * Abstract class used to show bed/Wakeup times depending on the concrete implementation.

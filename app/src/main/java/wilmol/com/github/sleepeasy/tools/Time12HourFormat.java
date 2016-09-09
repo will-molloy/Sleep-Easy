@@ -1,4 +1,4 @@
-package wilmol.com.github.sleepeasy;
+package wilmol.com.github.sleepeasy.tools;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -138,7 +138,7 @@ public class Time12HourFormat {
      * Returns a double of the hours/minutes from a 12 hour time.
      * E.g. (0,15,true) will return 0.25.
      */
-    protected double getHoursFrom12HourTime() {
+    public double getHoursFrom12HourTime() {
         double totalMins = _hour;
         totalMins += _isAM ? 0 : 12; // +12 if pm
         totalMins *= 60;

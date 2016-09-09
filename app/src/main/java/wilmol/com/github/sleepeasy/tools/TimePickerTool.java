@@ -2,8 +2,6 @@ package wilmol.com.github.sleepeasy.tools;
 
 import android.widget.TimePicker;
 
-import wilmol.com.github.sleepeasy.Time12HourFormat;
-
 /**
  * Tool used to set and get times from a TimePicker component.
  *

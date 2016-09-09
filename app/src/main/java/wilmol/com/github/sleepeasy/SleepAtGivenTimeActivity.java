@@ -6,6 +6,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
+
 /**
  * Activity for when the user wants to sleep at a certain wake up time.
  * Creates a list of recommended bed times and allows the user to set an alarm.

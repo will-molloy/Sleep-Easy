@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import wilmol.com.github.sleepeasy.Time12HourFormat;
+import wilmol.com.github.sleepeasy.tools.Time12HourFormat;
 
 import static org.junit.Assert.assertEquals;
 
