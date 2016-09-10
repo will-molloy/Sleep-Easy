@@ -19,9 +19,12 @@
     <string name="wake_up_at_one_of_these_times">You should wake up at one of the following times:</string>
     <string name="go_to_bed_at_one_of_the_following">You should go to bed at one of the following times:</string>
     <string name="dummy_current_time">It is currently 0000am</string>
-    <string name="dummy_explanation">These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n (Tthis is taking into consideration that it takes 15 minutes and 24 hours to fall asleep.)</string>
+    <string name="dummy_explanation">A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n These times ensure you\'ll rise at the end of a 90-minute sleep cycle \n\nand take into consideration that it takes 15 minutes and 24 hours to fall asleep.</string>
     <string name="dummy_times">00:00am or 00:00am or 00:00am or\n00:00am or 00:00am or 00:00am (on the next day).</string>
     <string name="dummy_wake_up">In order to wake up at 7:00am</string>
+    <string name="complete_sleep_cycles">A good night\'s sleep consists of 5-6 complete 90-minute sleep cycles.</string>
+    <string name="explanation_landscape">A good night\'s sleep consists of 5-6 complete 90-minute sleep cycles.</string>
+    <string name="dummy_times_landscape">00:00am or 00:00am or 00:00am or\n00:00am or 00:00am or 00:00am</string>
 
 
 </resources>

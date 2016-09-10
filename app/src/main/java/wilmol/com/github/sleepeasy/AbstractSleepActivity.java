@@ -2,6 +2,7 @@ package wilmol.com.github.sleepeasy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
@@ -49,8 +50,8 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
             hour += 12; // want to show plain hours and minutes here
         }
 
-        String explanation = "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n"
-                + "A good night\'s sleep consists of 5-6 complete sleep cycles. \n\n";
+        String explanation = "A good night's sleep consists of 5-6 complete sleep cycles.\n\n"
+                + "These times ensure you\'ll rise at the end of a 90-minute sleep cycle. \n\n";
 
         if (minute > 0 || hour > 0) {
 
@@ -119,13 +120,13 @@ public abstract class AbstractSleepActivity extends AppCompatActivity {
                 textView.append(Html.fromHtml("<i><small>" + "&nbsp;or&nbsp;" + "</i></small>"));    // italics
             }
             if ((i == 3 || i == 4 )&& !newLine){
-                textView.append("\n");
+                textView.append("\n");  // line break after 3 times
                 newLine = true;
             }
         }
-
-        if (timesOverlap) {
-            appendTimesOverlapDayMsg(textView);
+        int orientation = getResources().getConfiguration().orientation;
+        if (timesOverlap && orientation == Configuration.ORIENTATION_PORTRAIT) {
+            appendTimesOverlapDayMsg(textView); // only show (on next day/previous day) in portrait mode (space restrictions)
         }
     }
 

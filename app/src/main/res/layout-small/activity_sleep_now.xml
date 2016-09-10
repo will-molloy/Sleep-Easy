@@ -10,19 +10,18 @@ android:paddingBottom="@dimen/activity_vertical_margin"
 android:paddingLeft="@dimen/activity_horizontal_margin"
 android:paddingRight="@dimen/activity_horizontal_margin"
 android:paddingTop="@dimen/activity_vertical_margin"
-tools:context=".SleepNowActivity">
+tools:context=".SleepAtGivenTimeActivity">
 
 <TextView
     android:id="@+id/current_time_message"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:textSize="14sp"
+    android:textSize="16sp"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
     android:text="@string/dummy_wake_up" >
 </TextView>
-
 
 <TextView
     android:id="@+id/wake_up_at_msg"
@@ -30,25 +29,25 @@ tools:context=".SleepNowActivity">
     android:layout_height="wrap_content"
     android:gravity="center"
     android:text="@string/wake_up_at_one_of_these_times"
-    android:textSize="14sp"
+    android:textSize="16sp"
     android:layout_below="@+id/current_time_message"
     android:layout_marginTop="10dp"
     android:layout_centerHorizontal="true" >
 </TextView>
 
+<TextView
+    android:id="@+id/explanation_text_sleep_now"
+    android:text="@string/dummy_explanation"
+    android:textSize="12sp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_below="@+id/wakeup_times"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="7dp">
+</TextView>
 
-    <TextView
-        android:id="@+id/explanation_text_given_time"
-        android:text="@string/dummy_explanation"
-        android:textSize="10sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_above="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp">
-    </TextView>
 
 <TextView
     android:id="@+id/wakeup_times"
@@ -60,26 +59,28 @@ tools:context=".SleepNowActivity">
     android:layout_marginTop="10dp"
     android:gravity="center"
     android:text="@string/dummy_times"
-    android:textSize="14sp">
+    android:textSize="16sp">
 </TextView>
 
 
     <Button
         android:textSize="12sp"
-        android:layout_width="100dp"
+        android:layout_width="90dp"
         android:layout_height="30dp"
         android:id="@+id/button3"
         android:layout_gravity="center_horizontal"
         android:onClick="setAlarm"
         android:background="@drawable/custom_button"
         android:text="@string/set_alarm"
-        android:gravity="center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp" />
 
     <Button
         android:textSize="12sp"
-        android:layout_width="100dp"
+        android:layout_width="90dp"
         android:layout_height="30dp"
         android:id="@+id/button"
         android:text="@string/options"
@@ -87,7 +88,10 @@ tools:context=".SleepNowActivity">
         android:layout_gravity="center_horizontal"
         android:background="@drawable/custom_button"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"/>
 
 
 </RelativeLayout>

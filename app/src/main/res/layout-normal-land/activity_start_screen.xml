@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style="@style/CustomTheme"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="wilmol.com.github.sleepeasy.StartScreenActivity">
+
+    <TextView
+        android:id="@+id/current_time_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text="@string/wake_up_at"
+        android:layout_above="@+id/time_picker"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:textSize="14sp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:text="@string/calculate"
+        android:onClick="sleepAtGivenTime"
+        android:id="@+id/calculate_given_time"
+        android:background="@drawable/custom_button"
+        android:layout_alignTop="@+id/current_time_message"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text="@string/what_if_i_go_to_bed_now"
+        android:id="@+id/textView"
+        android:layout_below="@+id/time_picker" />
+
+    <Button
+        android:textSize="14sp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:text="@string/sleep_now"
+        android:onClick="sleepNow"
+        android:id="@+id/button2"
+
+        android:background="@drawable/custom_button"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+    <Button
+        android:textSize="14sp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/options"
+        android:onClick="settings"
+        android:id="@+id/button4"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp" />
+
+    <TimePicker
+        android:id="@+id/time_picker"
+        android:timePickerMode="spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
